@@ -1,0 +1,54 @@
+<div id="formulaire">
+	<%= form_for(@user, :url => fields_save_path, html: {class: ['text-center', 'fields_form'], :novalidate => 'novalidate'}) do |f| %>
+	    <% if @choice_sign_up %>
+            <div id="registration_choice">
+                <%= link_to image_tag('facebook/login-button.png', alt: t(:application_name)), '/auth/facebook', :id => "facebook_button" %></br>
+                Or</br>
+                <%= image_tag('emailsignup.png', alt: t(:application_name),:id => 'email_button') %>
+            </div>
+        <% end %>
+	<div id="emailsignup">
+			<% @fields.each do |field, field_label| %>
+				<div class="field">
+					<% if field != "terms_and_conditions" %>
+					    <% if field != "facebook" %>
+					        <div class="common_fields">
+						        <%= f.text_field field, :autofocus => true, :label => false, :placeholder => field_label['english'] %>
+						        <div class="error_message">is Required</div>
+					        </div>
+					    <% end %>
+					<% else %>
+						<div id="accept_terms">
+							<%= f.check_box :terms_and_conditions, as: :boolean %>
+							<span id="accept_terms_text">
+							    <%= field_label %>
+							</span>
+							<div class="error_message">Oops, did you check this box? </div>
+						</div>
+					<% end %>
+				</div>
+			<% end %>
+			<div id="server_error_message">
+		            <% @server_error_message.each do |msg| %>
+                        <%= msg %></br>
+                    <% end %>
+			</div>
+		</div>
+		<div id="enter_code">
+        	<%= f.submit "Continue" %>
+		</div>
+	<% end %>
+</div>
+<% if @has_terms_and_conditions %>
+<div id="terms">
+	<div class="popup_header">
+		<h3>Terms and conditions</h3>
+	</div>
+	<div class="popup_body">
+		<%= render 'terms_and_conditions' %>
+	</div>
+	<div class="popup_footer">
+		<button class="b-close" id="close-terms">Close</button>
+	</div>
+</div>
+<% end %>
